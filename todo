@@ -1,0 +1,15 @@
+implement ls with following flags at least:
+
+-l: long format with total sum for all file sizes in line before output
+information: total num of 512 blocks used
+mode | links | owner | group | bytes | month | day | hour | minute | pathname
+between mode and links, @ if extended attributes, or a + if extended security
+if time of last mod is +- 6 months from now display year instead of hour/minute
+
+-R: recursivly list subdirectories encountered
+
+-a: include . directories
+
+-r: reverse the order lexiconigraphically
+
+-t: sort by time modified (most recent first) before sorting lexiconigraphically
