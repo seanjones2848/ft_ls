@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_fprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2017/11/27 13:00:47 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 17:12:53 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "ft_printf.h"
 
-static void	init(t_ls *ls)
+int			ft_fprintf(int fd, const char *fmt, ...)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
-}
+	t_print		p;
 
-int			main(int ac, char **av)
-{
-	t_ls	ls;
-
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	prt_init_print(&p, fd, (char*)fmt);
+	va_start(p.args, fmt);
+	prt_printf_meat(&p);
+	va_end(p.args);
+	return (p.ret);
 }

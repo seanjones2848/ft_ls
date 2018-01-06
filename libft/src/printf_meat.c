@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   printf_meat.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2017/11/27 13:01:39 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 17:15:49 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "ft_printf.h"
 
-static void	init(t_ls *ls)
+static void	print_fmt(t_print *p, int j)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
+	p->ret += write(p->fd, p->fmt + j, p->i - j);
 }
 
-int			main(int ac, char **av)
+void		prt_printf_meat(t_print *p)
 {
-	t_ls	ls;
+	int j;
 
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	j = 0;
+	while (p->fmt[p->i])
+	{
+		if (p->fmt[p->i] == '%')
+		{
+			print_fmt(p, j);
+			prt_reset(p);
+			prt_arg_handle(p);
+			j = p->i + 1;
+		}
+		p->i++;
+	}
+	print_fmt(p, j);
 }

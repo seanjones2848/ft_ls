@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2018/01/01 17:38:03 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 17:12:41 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "ft_printf.h"
 
-static void	init(t_ls *ls)
+int		prt_is_error(char c)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
+	return (c == 'a' || c == '*' || c == 'e' || c == 'f' || c == 'g' ||
+			c == 'L' || c == 'n' || c == 'A') ? (1) : (0);
 }
 
-int			main(int ac, char **av)
+void	prt_get_error(t_print *p)
 {
-	t_ls	ls;
+	int	error;
 
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	error = (int)va_arg(p->args, int);
+	p->i++;
+	write(p->fd, "error", 5);
 }

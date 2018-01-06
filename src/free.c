@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2018/01/05 21:01:58 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 22:58:16 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	init(t_ls *ls)
+static void	circle_free(t_lslist *l)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
+	t_lslist *t;
+	while (l)
+	{
+		t = l;
+		if (l->next)
+			l = l->next;
+		t->next = NULL;
+		t->prev = NULL;
+		free(t);
+	}
 }
 
-int			main(int ac, char **av)
+void		ls_free(t_ls *ls)
 {
-	t_ls	ls;
-
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	circle_free(ls->f);
+	circle_free(ls->d);
 }

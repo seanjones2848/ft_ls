@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2018/01/05 16:16:34 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 22:58:11 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	init(t_ls *ls)
+void	ls_error(int error, char *message)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
-}
-
-int			main(int ac, char **av)
-{
-	t_ls	ls;
-
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	if (error == USAGE)
+		ft_fprintf(2, "usage: ft_ls [-1aAltrR] [file ...]\n");
+	if (error == NOSPACE)
+		ft_fprintf(2, "not enough space to malloc a %s\n", message);
+	if (error == NOENT)
+		ft_fprintf(2, "ft_ls: %s: No, such file or directory\n", message);
+	exit(-1);
 }

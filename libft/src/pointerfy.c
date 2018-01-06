@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pointerfy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/18 14:58:57 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:02 by sjones           ###   ########.fr       */
+/*   Created: 2017/11/27 13:01:29 by sjones            #+#    #+#             */
+/*   Updated: 2018/01/05 17:15:18 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "ft_printf.h"
 
-static void	init(t_ls *ls)
+void		prt_pointerfy(t_print *p)
 {
-	ls->flags = 0;
-	ls->f = NULL;
-	ls->d = NULL;
-}
-
-int			main(int ac, char **av)
-{
-	t_ls	ls;
-
-	init(&ls);
-	ls_parse(av, &ls);
-	ls_main(&ls);
-	ls_free(&ls);
-	return (0);
+	p->arg.u = va_arg(p->args, unsigned long int);
+	p->num = ft_uitoa_base(p->arg.u, 16);
+	p->ret += write(p->fd, "0x", 2);
+	p->ret += write(p->fd, p->num, ft_strlen(p->num));
 }

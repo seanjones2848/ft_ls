@@ -1,3 +1,8 @@
+
+last left off on list.c
+
+
+
 implement ls with following flags at least:
 
 -l: long format with total sum for all file sizes in line before output
