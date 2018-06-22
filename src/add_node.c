@@ -6,7 +6,7 @@
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 19:37:56 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:08 by sjones           ###   ########.fr       */
+/*   Updated: 2018/05/07 23:52:50 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,29 @@ t_lslist	*ls_new_node(char *name, char type)
 	new->type = type;
 	new->prev = NULL;
 	new->next = NULL;
+	new->down = NULL;
 	return (new);
+}
+
+int			cmp_time(t_lslist *l, t_lslist *n)
+{
+	if (l->stat->st_mtimespec.tv_sec < n->stat->st_mtimespec.tv_sec)
+		return (1);
+	else if (l->stat->st_mtimespec.tv_sec == n->stat->st_mtimespec.tv_sec)
+	{
+		if (l->stat->st_mtime < n->stat->st_mtime)
+			return (1);
+		else if (l->stat->st_mtime == n->stat->st_mtime)
+		{
+			if (l->stat->st_mtimespec.tv_nsec < n->stat->st_mtimespec.tv_nsec)
+				return (1);
+			else if (l->stat->st_mtimespec.tv_nsec ==
+					n->stat->st_mtimespec.tv_nsec)
+				if (ft_strcmp(l->name, n->name) < 0)
+					return (1);
+		}
+	}
+	return (0);
 }
 
 void		add_time(t_lslist *l, t_lslist *n)
@@ -34,11 +56,8 @@ void		add_time(t_lslist *l, t_lslist *n)
 	else
 	{
 		t = l;
-		while (t->stat->st_mtimespec.tv_nsec <= n->stat->st_mtimespec.tv_nsec)
+		while (cmp_time(t,n))
 			t = t->next;
-		if (t->stat->st_mtimespec.tv_nsec == n->stat->st_mtimespec.tv_nsec)
-			if (ft_strcmp(t->name, n->name) < 0)
-				t = t->next;
 		n->prev = t;
 		n->next = t->next;
 		t->next = n;
@@ -62,23 +81,13 @@ void		add_node(t_lslist *l, t_lslist *n)
 	}
 }
 
-int			add(char *name, char type, t_ls *ls)
+void		ls_add(char *name, char type, t_ls *ls)
 {
 	t_lslist *new;
 
 	new = ls_new_node(name, type);
-	if (type == 'f')
-	{
-		if (LS_T(ls->flags))
-			add_time(ls->f, new);
-		else
-			add_node(ls->f, new);
-	}
+	if (LS_T(ls->flags))
+		add_time(ls->all, new);
 	else
-	{
-		if (LS_T(ls->flags))
-			add_time(ls->d, new);
-		else
-			add_node(ls->d, new);
-	}
+		add_node(ls->all, new);
 }

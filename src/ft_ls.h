@@ -6,7 +6,7 @@
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 14:59:45 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:57:55 by sjones           ###   ########.fr       */
+/*   Updated: 2018/06/18 21:13:43 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,7 @@
 # include <pwd.h>
 # include <grp.h>
 # include <stdbool.h>
-
 # define NAME_LEN 256
-# define LS_ONE(x) ((x && 1) ? (1) : (0))
-# define LS_A(x) ((x && (1 << 1)) ? (0) : (0))
-# define LS_AA(x) ((x && (1 << 2)) ? (1) : (0))
-# define LS_T(x) ((x && (1 << 3)) ? (1) : (0))
-# define LS_L(x) ((x && (1 << 4)) ? (1) : (0))
-# define LS_R(x) ((x && (1 << 5)) ? (1) : (0))
-# define LS_RR(x) ((x && (1 << 6)) ? (1) : (0))
-
-enum				e_error
-{
-	USAGE,
-	NOSPACE,
-	NOENT,
-	ERRNO
-};
 
 enum				e_flags
 {
@@ -52,20 +36,38 @@ enum				e_flags
 	R = 1 << 6
 };
 
+# define LS_ONE(x) ((x & 1 == 1) ? (1) : (0))
+# define LS_A(x) ((x & a == a) ? (0) : (0))
+# define LS_AA(x) ((x & A == A) ? (1) : (0))
+# define LS_T(x) ((x & t == t) ? (1) : (0))
+# define LS_L(x) ((x & l == l) ? (1) : (0))
+# define LS_R(x) ((x & r == r) ? (1) : (0))
+# define LS_RR(x) ((x & R == R) ? (1) : (0))
+
+typedef struct stat	t_stat;
+
+enum				e_error
+{
+	USAGE,
+	NOSPACE,
+	NOENT,
+	ERRNO
+};
+
 typedef struct		s_lslist
 {
 	char			name[NAME_LEN];
 	char			type;
-	struct stat		*stat;
-	s_lslist		*next;
-	s_lslist		*prev;
+	t_stat			*stat;
+	struct s_lslist	*next;
+	struct s_lslist	*prev;
+	struct s_lslist	*down;
 }					t_lslist;
 
 typedef struct		s_ls
 {
 	int				flags;
-	t_lslist		*f;
-	t_lslist		*d;
+	t_lslist		*all;
 }					t_ls;
 
 /*

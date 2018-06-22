@@ -6,7 +6,7 @@
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:16:45 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:58:46 by sjones           ###   ########.fr       */
+/*   Updated: 2018/05/07 15:42:34 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,8 @@ static void	trav(t_lslist *l, t_ls *ls, int d)
 
 void		ls_main(t_ls *ls)
 {
-	if (ls->f || ls->d)
-	{
-		if (ls->f)
-			LS_R(ls->flags) ? trav(ls->f, ls, 1) : trav(ls->f, ls, 0);
-		if (ls->d)
-			LS_R(ls->flags) ? trav(ls->d, ls, 1) : trav(ls->d, ls, 0);
-	}
+	if (ls->all)
+		LS_R(ls->flags) ? trav(ls->all, ls, 1) : trav(ls->all, ls, 0);
 	else if (!LS_RR(ls->flags))
 		ls_listdir(".", ls);
 }

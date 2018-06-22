@@ -6,7 +6,7 @@
 /*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:15:47 by sjones            #+#    #+#             */
-/*   Updated: 2018/01/05 22:14:01 by sjones           ###   ########.fr       */
+/*   Updated: 2018/05/07 23:52:00 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ static void	get_flags(char *av, t_ls *ls)
 	}
 }
 
+void		get_name_path(char *file, char *name, char *path)
+{
+	name = (name = strrchr(file, '/') + 1) ? (name) : (file);
+	path = ((path = strrchr(file, '/'))) ? (ft_strndup(file, file - path)) :
+		(ft_strdup("./"));
+}
+
 static int	ls_check_file(char *file)
 {
 	char			*name;
@@ -34,9 +41,9 @@ static int	ls_check_file(char *file)
 	DIR				*dir;
 	struct dirent	*sd;
 
-	name = (name = strrchr(file, '/') + 1) ? (name) : (file);
-	path = ((path = strrchr(file, '/'))) ? (ft_strndup(file, file - path)) :
-		(ft_strdup("./"));
+	path = NULL;
+	name = NULL;
+	get_name_path(file, name, path);
 	if(!(dir = opendir(path)))
 		return (0);
 	free(path);
